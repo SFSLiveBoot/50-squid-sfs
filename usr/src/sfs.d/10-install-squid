@@ -1,0 +1,21 @@
+#!/bin/sh
+
+set -e
+
+. "$(dirname "$0")/.common.sh"
+
+: "${squid_ver:=$(latest_ver)}"
+squid_v="${squid_ver%%.*}"
+squid_rel="${squid_ver%.*}"
+: "${squid_src:=http://www.squid-cache.org/Versions/v${squid_v}/${squid_rel}/squid-${squid_ver}.tar.xz}"
+
+: "${cpu_count:=$(grep -c ^processor /proc/cpuinfo)}"
+: "${cpu_count:=2}"
+
+make_flags="-j${cpu_count}" dl_compile_and_install "$squid_src" /opt/squid "$DESTDIR" "" \
+  --disable-arch-native \
+  --localstatedir=/var \
+  --with-logdir=/var/log/squid \
+  --sbindir=/opt/squid/bin \
+  --sysconfdir=/etc/squid \
+  --with-default-user=proxy

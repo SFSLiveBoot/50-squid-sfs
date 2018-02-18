@@ -1,0 +1,8 @@
+[Service]
+ExecStart=/opt/squid/bin/squid -N
+ExecReload=/opt/squid/bin/squid -k reconfigure
+ExecStop=/opt/squid/bin/squid -k shutdown
+ExecStartPre=/usr/bin/install -d -o proxy -g adm /var/log/squid
+
+[Install]
+WantedBy=multi-user.target
